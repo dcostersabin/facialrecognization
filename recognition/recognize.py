@@ -5,9 +5,10 @@ import cv2
 import face_recognition
 import os
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 def recognize():
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     encoding = BASE_DIR + "/data/trainedData/encoding1.pickle"
     data = pickle.loads(open(encoding, "rb").read())
     print(data)
@@ -48,8 +49,9 @@ def recognize():
             left = int(left * r)
             cv2.rectangle(frame, (left, top), (right, bottom), (255, 0, 0), 2)
             y = top - 15 if top - 15 > 15 else top + 15
-            cv2.putText(frame, "Name:"+name, (left, y), cv2.FONT_HERSHEY_SIMPLEX, 0.69, (0, 255, 0), 2)
-            cv2.putText(frame," Press Esc If Recognized",(left,bottom+20), cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,255))
+            cv2.putText(frame, "Name:" + name, (left, y), cv2.FONT_HERSHEY_SIMPLEX, 0.69, (0, 255, 0), 2)
+            cv2.putText(frame, " Press Esc If Recognized", (left, bottom + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                        (0, 0, 255))
         cv2.imshow("Face Recognition", frame)
         if cv2.waitKey(1) == 27:
             break

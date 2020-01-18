@@ -1,22 +1,28 @@
+import os
+
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from recognition import data_collection
 from recognition import train
 from recognition import recognize
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from requestHandler.add_user_form import EmployeeAddingForm
+from django.contrib import messages
+from user.models import Employees
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+path = BASE_DIR + '/static/dataset/'
 
 
 def index(request):
-    return HttpResponse(render(request,"index.html"))
+    return HttpResponse(render(request, "index.html"), )
 
 
 def capture(request):
-    if data_collection.create_dir(str(request.POST['name'])):
-        if data_collection.capture_image(str(request.POST['name'])):
-            return HttpResponse("Data Has Been SuccessFully Collected")
-
+    if data_collection.capture_image((request.POST['id']), 0):
+        return HttpResponse("Data Has Been SuccessFully Collected")
     else:
         return HttpResponse("not created")
 
@@ -35,7 +41,8 @@ def rec(request):
 
 
 def home(request):
-    return HttpResponse(render(request, "home.html"))
+    employees = Employees.objects.order_by('-id')[:10]
+    return render(request, "home.html", {'employees': employees})
 
 
 class HelloView(APIView):
@@ -44,3 +51,34 @@ class HelloView(APIView):
     def get(self, request):
         content = {'message': 'hello world'}
         return Response(content)
+
+
+def add_user(request):
+    user = EmployeeAddingForm(request.POST)
+    if user.is_valid():
+        new = user.save()
+        file_path = new.name + '__id__' + str(new.id)
+        # return HttpResponse(file_path)
+        data_collection.create_dir(file_path)
+        if os.path.isdir(path + '' + file_path):
+            messages.success(request, f'New User Added Now You Can Add Data')
+            return redirect('home')
+        else:
+            messages.info(request, f'Failed To Create User Enter Valid Data')
+            return redirect('home')
+
+    else:
+        messages.warning(request, f'Failed To Create User Enter Valid Data')
+        return redirect('home')
+
+
+def show_users(request):
+    employees = Employees.objects.all().order_by('-id')
+    return render(request, 'showusers.html', {'employees': employees})
+
+
+def add_more_data(request):
+    if data_collection.capture_image(request.POST['id'], 1):
+        return HttpResponse("Data Has Been SuccessFully Collected")
+    else:
+        return HttpResponse("not created")

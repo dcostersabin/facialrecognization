@@ -1,0 +1,22 @@
+{% extends "layout/master.html" %}
+{% block content %}
+
+
+<div class="container-fluid col-md-4 ">
+    <div class="card">
+        <div class="card-body">
+            <h2>You Have Been Logged Out</h2>
+        </div>
+        <div class="card-footer text-center">
+
+        <button class="btn btn-outline-info" onclick="window.location.href='{% url 'login' %}'"> Login</button>
+
+
+        </div>
+    </div>
+
+
+
+</div>
+
+{% endblock %}

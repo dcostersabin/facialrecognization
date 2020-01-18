@@ -9,5 +9,8 @@ urlpatterns = [
     path('recognize/',views.rec,name="recognize"),
     path('hello/',views.HelloView.as_view(),name="hello"),
     path('home/',views.home,name="home"),
+    path('addUser',views.add_user,name="addUser"),
+    path('users/',views.show_users,name='users'),
+    path('addMoreData/',views.add_more_data,name='addMoreData')
 
 ]
