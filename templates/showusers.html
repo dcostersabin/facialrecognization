@@ -16,8 +16,8 @@
 
                             <div class="media text-muted pt-3">
                                 {% if employee.data_status %}
-                                      <img class="bd-placeholder-img ml-2 rounded" width="32" height="32"
-                                         src="/static/dataset/{{ employee.id }}/10.jpg"
+                                    <img class="bd-placeholder-img ml-2 rounded" width="32" height="32"
+                                         src="/static/dataset/{{ employee.name }}__id__{{ employee.id }}/10.jpg"
                                          preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
                                          aria-label="Placeholder: 32x32"/>
                                 {% else %}
@@ -31,37 +31,48 @@
 
                                 {% endif %}
                                 <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray ml-1">
-                                    <strong class="d-block text-gray-dark">@{{ employee.name }} <small>System
-                                        Id:{{ employee.id }}</small> </strong>
+                                    <strong class="d-block text-gray-dark">@<a style="cursor: pointer" class="text-info" onclick='sub({{ employee.id }})'>{{ employee.name }}</a>
+                                         </strong>
+                                    <small>System
+                                            Id:{{ employee.id }}</small>
                                     <small>Employee Id: {{ employee.employee_id }}</small>
-                                </p>
+                                    <div class="d-none">
+                                <form action="{% url 'profile' %}" method="post" id="form{{ employee.id }}">
+                                    {% csrf_token %}
+                                    <input type="hidden"  name="user_id" value="{{ employee.id }}" >
+                                </form>
                             </div>
-                        </div>
-                        <div class="card-footer">
-                            {% if employee.data_status %}
-                                 <form action="{% url 'addMoreData' %}" method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="id" value="{{ employee.id }}">
-                                    <button class="btn btn-outline-success">Add New</button>
-                                </form>
-                            {% else %}
-                                <form action="{% url 'capture' %}" method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="id" value="{{ employee.id }}">
-                                    <button class="btn btn-outline-info">Add Data</button>
-                                </form>
-
-                            {% endif %}
+                            </p>
                         </div>
                     </div>
+                    <div class="card-footer">
+                        {% if employee.data_status %}
+                            <form action="{% url 'addMoreData' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ employee.id }}">
+                                <button class="btn btn-outline-success">Add New</button>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'capture' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ employee.id }}">
+                                <button class="btn btn-outline-info">Add Data</button>
+                            </form>
+
+                        {% endif %}
+                    </div>
+                </div>
                 </div>
 
             {% endfor %}
 
 
-        </div>
+    </div>
 
     </div>
+
+
+    <
 
 
 {% endblock %}

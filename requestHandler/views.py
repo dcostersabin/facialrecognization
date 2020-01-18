@@ -82,3 +82,21 @@ def add_more_data(request):
         return HttpResponse("Data Has Been SuccessFully Collected")
     else:
         return HttpResponse("not created")
+
+
+def admin_test(request):
+    name = recognize.recognize()
+    temp_id = name.split("__id__", 1)
+    user = Employees.objects.filter(id=temp_id[1]).get()
+    user_path = user.name + '__id__' + str(user.id)
+    no_files = len([name for name in os.listdir(path + '' + user_path) if
+                    os.path.isfile(os.path.join(path + '' + user_path, name))])
+    return render(request, "individualUser.html", {"data": user, "file": range(1, no_files)})
+
+
+def view_profile(request):
+    user = Employees.objects.filter(id=request.POST['user_id']).get()
+    user_path = user.name + '__id__' + str(user.id)
+    no_files = len([name for name in os.listdir(path + '' + user_path) if
+                    os.path.isfile(os.path.join(path + '' + user_path, name))])
+    return render(request, "individualUser.html", {"data": user, "file": range(1, no_files)})

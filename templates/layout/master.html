@@ -185,7 +185,7 @@
                 <span class="badge badge-pill bg-light align-text-bottom"></span>
             </a>
              <a class="nav-link" href="{% url 'train' %}">Train Machine</a>
-            <a class="nav-link" href="">Test Machine</a>
+            <a class="nav-link" href="{% url 'adminTest' %}">Test Machine</a>
             <a class="nav-link" href="{% url  'logout' %}">Logout</a>
         </nav>
     </div>
@@ -219,6 +219,12 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
 
+<script>
+    function sub(id)
+    {
+        $('#form'+id).submit();
+    }
+</script>
 
 
 </html>
