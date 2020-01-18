@@ -1,10 +1,13 @@
 import os
+
+import imutils
 from django.http import HttpResponse
 import numpy as np
 import cv2
+from user.models import Employees
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-path = BASE_DIR + '/data/dataset/'
+path = BASE_DIR + '/static/dataset/'
 FACE_CASCADE = cv2.CascadeClassifier(BASE_DIR + '/data/haarcascades/haarcascade_frontalface_default.xml')
 
 
@@ -24,8 +27,16 @@ def delete_dir(name):
         return False
 
 
-def capture_image(name):
-    sample = 0
+def capture_image(user_id, mode):
+    users = Employees.objects.filter(id=user_id).get()
+    user_path = users.name + '__id__' + str(users.id)
+    if mode == 0:
+        sample = 0
+    elif mode == 1:
+        no_files = len([name for name in os.listdir(path + '' + user_path) if
+                        os.path.isfile(os.path.join(path + '' + user_path, name))])
+        sample = no_files
+
     cap = cv2.VideoCapture(0)
     while True:
         ret, img = cap.read()
@@ -35,16 +46,21 @@ def capture_image(name):
 
         for (x, y, w, h) in faces:
             sample = sample + 1
-            cv2.imwrite(path + str(name) + '/' + str(sample) + '.jpg', gray[y:y + h, x:x + w])
-            cv2.rectangle(img, (x, y), (x + w, y + h), (255, 200, 0), 2)
+            cv2.imwrite(path + str(user_path) + '/' + str(sample) + '.jpg', gray[y:y + h, x:x + w])
+            cv2.rectangle(img, (x, y), (x + w, y + h), (150, 255, 0), 2)
             cv2.waitKey(100)
 
         cv2.imshow("Capture Sample For Training", img)
         cv2.waitKey(1)
-
-        if sample > 60:
-            break
+        if mode == 0:
+            if sample > 60:
+                break
+        elif mode == 1:
+            if sample > (no_files + 30):
+                break
 
     cap.release()
     cv2.destroyAllWindows()
+    users.data_status = True
+    users.save()
     return True

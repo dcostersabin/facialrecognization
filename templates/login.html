@@ -1,0 +1,47 @@
+{% extends "layout/master.html" %}
+{% load crispy_forms_tags %}
+
+{% block nav %}
+ {% if user.is_authenticated %}
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        {% else %}
+            <div class="form-inline my-2 my-lg-0">
+
+                <button class="btn btn-outline-info my-2 my-sm-0" onclick="window.location.href='{% url 'register' %}'">Sign Up</button>
+            </div>
+
+        {% endif %}
+{% endblock %}
+{% block content %}
+
+
+<div class="container-fluid col-md-4 ">
+    <div class="card">
+        <div class="card-body">
+            <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom text-center">
+            Log In
+            </legend>
+                {{ form|crispy }}
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Login</button>
+        </div>
+    </form>
+        </div>
+        <div class="card-footer">
+
+        <small class="text-muted">Need An Account? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a></small>
+
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

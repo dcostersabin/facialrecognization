@@ -7,13 +7,12 @@ from django.http import HttpResponse
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-dataset = BASE_DIR + "/data/dataset/"
+dataset = BASE_DIR + "/static/dataset/"
 
 trained_data = BASE_DIR + "/data/trainedData/encoding1.pickle"
 
 
 def train():
-    os.remove(trained_data)
     print("Deleted Previous Trained Data")
     image_paths = list(paths.list_images(dataset))
     known_encodings = []
