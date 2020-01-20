@@ -1,5 +1,6 @@
 import os
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from recognition import data_collection
@@ -30,9 +31,11 @@ def capture(request):
 def train_data(request):
     status = train.train()
     if status:
-        return HttpResponse("Training Success")
+        messages.success(request, "The Machine Was Trained Successfully")
+        return redirect('home')
     else:
-        return HttpResponse("Failed To Train")
+        messages.warning(request, "The Machine Failed To  Train")
+        return redirect('home')
 
 
 def rec(request):
@@ -100,3 +103,15 @@ def view_profile(request):
     no_files = len([name for name in os.listdir(path + '' + user_path) if
                     os.path.isfile(os.path.join(path + '' + user_path, name))])
     return render(request, "individualUser.html", {"data": user, "file": range(1, no_files)})
+
+
+def search(request):
+    try:
+        user = Employees.objects.filter(employee_id=request.POST['user_id']).get()
+        user_path = user.name + '__id__' + str(user.id)
+        no_files = len([name for name in os.listdir(path + '' + user_path) if
+                        os.path.isfile(os.path.join(path + '' + user_path, name))])
+        return render(request, 'individualUser.html', {'data': user, 'file': range(1, no_files)})
+    except ObjectDoesNotExist as e:
+        messages.warning(request, "Please Enter A Valid Data")
+        return redirect('home')

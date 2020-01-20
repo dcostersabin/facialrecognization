@@ -14,5 +14,6 @@ urlpatterns = [
     path('addMoreData/',views.add_more_data,name='addMoreData'),
     path('adminTest/',views.admin_test,name='adminTest'),
     path('profile/',views.view_profile,name='profile'),
+    path('search/',views.search,name='search'),
 
 ]

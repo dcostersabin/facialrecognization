@@ -120,7 +120,6 @@
 <body class="bg-light" onload="apple()">
 
 
-
 <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
     <a class="navbar-brand" href="{% url 'index' %}">FCS</a>
     <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
@@ -131,7 +130,8 @@
         <ul class="navbar-nav mr-auto">
             {% if user.is_authenticated %}
                 <li class="nav-item ">
-                    <a class="nav-link" href="{% url 'home' %}">{{ user.username }} <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{% url 'home' %}">{{ user.username }} <span
+                            class="sr-only">(current)</span></a>
                 </li>
 
             {% else %}
@@ -159,20 +159,24 @@
             {#                </div>#}
             {#            </li>#}
         </ul>
-       {% block nav %}
-        {% if user.is_authenticated %}
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-        {% else %}
-            <div class="form-inline my-2 my-lg-0">
+        {% block nav %}
+            {% if user.is_authenticated %}
+                <form class="form-inline my-2 my-lg-0" method="post" action="{% url 'search' %}">
+                    {% csrf_token %}
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search Employees By Id" name="user_id"
+                           aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            {% else %}
+                <div class="form-inline my-2 my-lg-0">
 
-                <button class="btn btn-outline-info my-2 my-sm-0" onclick="window.location.href='{% url 'login' %}'">Sign In</button>
-            </div>
+                    <button class="btn btn-outline-info my-2 my-sm-0"
+                            onclick="window.location.href='{% url 'login' %}'">Sign In
+                    </button>
+                </div>
 
-        {% endif %}
-       {% endblock %}
+            {% endif %}
+        {% endblock %}
     </div>
 </nav>
 
@@ -184,7 +188,7 @@
                 Users
                 <span class="badge badge-pill bg-light align-text-bottom"></span>
             </a>
-             <a class="nav-link" href="{% url 'train' %}">Train Machine</a>
+            <a class="nav-link" href="{% url 'train' %}">Train Machine</a>
             <a class="nav-link" href="{% url 'adminTest' %}">Test Machine</a>
             <a class="nav-link" href="{% url  'logout' %}">Logout</a>
         </nav>
@@ -220,9 +224,8 @@
         crossorigin="anonymous"></script>
 
 <script>
-    function sub(id)
-    {
-        $('#form'+id).submit();
+    function sub(id) {
+        $('#form' + id).submit();
     }
 </script>
 
