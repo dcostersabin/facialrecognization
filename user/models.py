@@ -10,5 +10,7 @@ class Employees(models.Model):
 
 class Attendance(models.Model):
     user_id = models.ForeignKey(Employees, on_delete=models.CASCADE, null=False)
-    entry_date = models.DateTimeField(blank=True)
-    exit_date = models.DateTimeField(blank=True)
+    entry_date = models.DateField(null=True)
+    entry_time = models.TimeField(null=True)
+    exit_date = models.DateField(null=True)
+    exit_time = models.TimeField(null=True)

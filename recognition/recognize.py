@@ -58,5 +58,4 @@ def recognize():
 
     cv2.destroyAllWindows()
     cap.release()
-
     return name

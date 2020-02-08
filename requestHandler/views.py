@@ -1,5 +1,5 @@
 import os
-
+from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -12,6 +12,8 @@ from rest_framework.permissions import IsAuthenticated
 from requestHandler.add_user_form import EmployeeAddingForm
 from django.contrib import messages
 from user.models import Employees
+from user.models import Attendance
+from django.contrib.auth.decorators import login_required
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 path = BASE_DIR + '/static/dataset/'
@@ -23,9 +25,11 @@ def index(request):
 
 def capture(request):
     if data_collection.capture_image((request.POST['id']), 0):
-        return HttpResponse("Data Has Been SuccessFully Collected")
+        messages.success(request, "Data Has Been Collected Successfully")
+        return redirect('home')
     else:
-        return HttpResponse("not created")
+        messages.success(request, "Data Creation Failed")
+        return redirect('home')
 
 
 def train_data(request):
@@ -40,12 +44,21 @@ def train_data(request):
 
 def rec(request):
     name = recognize.recognize()
-    return HttpResponse(name)
+    temp_id = name.split("__id__", 1)
+    user = Employees.objects.filter(id=temp_id[1]).get()
+    user_path = user.name + '__id__' + str(user.id)
+
+    return render(request, 'attend.html',
+                  {'name': user.name, 'employee_id': user.employee_id, 'id': user.id, 'status': 'check'})
 
 
+@login_required
 def home(request):
-    employees = Employees.objects.order_by('-id')[:10]
-    return render(request, "home.html", {'employees': employees})
+    if request.user.is_authenticated:
+        employees = Employees.objects.order_by('-id')[:10]
+        return render(request, "home.html", {'employees': employees})
+    else:
+        return render(request, 'index.html')
 
 
 class HelloView(APIView):
@@ -82,9 +95,11 @@ def show_users(request):
 
 def add_more_data(request):
     if data_collection.capture_image(request.POST['id'], 1):
-        return HttpResponse("Data Has Been SuccessFully Collected")
+        messages.success(request, "New Data Collected Successfully")
+        return redirect('home')
     else:
-        return HttpResponse("not created")
+        messages.warning(request, "Failed To Initialized Data")
+        return redirect('home')
 
 
 def admin_test(request):
@@ -115,3 +130,31 @@ def search(request):
     except ObjectDoesNotExist as e:
         messages.warning(request, "Please Enter A Valid Data")
         return redirect('home')
+
+
+def attend(request):
+    # return HttpResponse(datetime.now().date())
+
+    if Employees.objects.filter(id=request.POST['id']).exists():
+        user = Employees.objects.filter(id=request.POST['id']).get()
+        check = Attendance.objects.filter(entry_date=datetime.now().date(), user_id=user.id).exists()
+        if not check:
+            new = Attendance()
+            new.user_id_id = user.id
+            new.entry_date = datetime.now().date()
+            new.entry_time = datetime.now().time()
+            new.save()
+            messages.success(request, "Recorded Entry For User " + user.name)
+            return redirect('index')
+
+        else:
+            update = Attendance.objects.filter(entry_date=datetime.now().date(), user_id=user.id).get()
+            update.exit_date = datetime.now().date()
+            update.exit_time = datetime.now().time()
+            update.save()
+            messages.success(request, "Recorded Exit For User " + user.name)
+            return redirect('index')
+
+    else:
+        messages.warning(request,"The Id Provided Doesnt Match")
+        return HttpResponse(render(request, 'index.html'))

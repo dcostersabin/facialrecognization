@@ -15,5 +15,6 @@ urlpatterns = [
     path('adminTest/',views.admin_test,name='adminTest'),
     path('profile/',views.view_profile,name='profile'),
     path('search/',views.search,name='search'),
+    path('attend',views.attend,name='attend'),
 
 ]

@@ -1,0 +1,68 @@
+{% extends 'layout/master.html' %}
+
+{% block content %}
+
+    {% if status == 'check' %}
+        <div class="container row  text-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-m-4">
+                            <img class="bd-placeholder-img rounded-circle" width="140" height="140"
+                                 src="/static/dataset/{{ name }}__id__{{ id }}/10.jpg"
+                            >
+                            <h2>{{ data.name }}</h2>
+                            <h4 class="text-muted">Employee Id: {{ employee_id }}</h4>
+                            <smaall class="text-muted">System Id: {{ id }}</smaall>
+
+                        </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <div class="text-muted mb-2">
+                            Not Recognized!!! then click the button to try again <a
+                                href="" onclick="window.location.reload()"
+                                class="text-black">Try Again</a>
+                        </div>
+                        <div class="form-group">
+                            <form action="{% url 'attend' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ id }}">
+                                <button class="btn btn-outline-success">Attend</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        {% else %}
+
+         <div class="container row  text-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-m-4">
+                            <img class="bd-placeholder-img rounded-circle" width="140" height="140"
+                                 src="/static/dataset/{{ name }}__id__{{ id }}/10.jpg"
+                            >
+                            <h2>{{ data.name }}</h2>
+                            <h4 class="text-muted">Employee Id: {{ employee_id }}</h4>
+                            <smaall class="text-muted">System Id: {{ id }}</smaall>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+    {% endif %}
+{% endblock %}
