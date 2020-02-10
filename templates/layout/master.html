@@ -117,11 +117,11 @@
 
     </style>
 </head>
-<body class="bg-light" onload="apple()">
+<body class="bg-light">
 
 
 <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
-    <a class="navbar-brand" href="{% url 'index' %}">FCS</a>
+    <a class="navbar-brand" href="{% url 'index' %}">FRS</a>
     <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -188,6 +188,8 @@
                 Users
                 <span class="badge badge-pill bg-light align-text-bottom"></span>
             </a>
+            <a class="nav-link" href="{% url 'report' %}">Generate Report</a>
+            <a class="nav-link" href="{% url 'charts' %}">Generate Charts</a>
             <a class="nav-link" href="{% url 'train' %}">Train Machine</a>
             <a class="nav-link" href="{% url 'adminTest' %}">Test Machine</a>
             <a class="nav-link" href="{% url  'logout' %}">Logout</a>
@@ -196,7 +198,7 @@
 
 {% endif %}
 
-<main role="main" class="container mt-4 ">
+<main role="main" class=" container-fluid mt-2 ">
     {% if messages %}
         {% for message in messages %}
 
@@ -229,5 +231,47 @@
     }
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            datasets: [{
+                label: 'No Of Employees Present In A Day',
+                data: ['{{ days.0 }}', '{{ days.1 }}', '{{ days.2 }}', '{{ days.3 }}', '{{ days.4 }}', '{{ days.5 }}', '{{ days.6 }}', '{{ days.7 }}'],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1.5
+            }]
+        },
+        options: {
+
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+</script>
 
 </html>

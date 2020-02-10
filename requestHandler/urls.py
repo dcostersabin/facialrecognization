@@ -15,6 +15,11 @@ urlpatterns = [
     path('adminTest/',views.admin_test,name='adminTest'),
     path('profile/',views.view_profile,name='profile'),
     path('search/',views.search,name='search'),
-    path('attend',views.attend,name='attend'),
+    path('attend/',views.attend,name='attend'),
+    path('report/',views.report,name='report'),
+    path('generate/',views.report,name='generate'),
+    path('charts/',views.charts,name='charts'),
+    path('downloadPdf/',views.download_pdf,name='downloadPdf'),
+    path('chartData/',views.chart_data,name='chartData')
 
 ]
