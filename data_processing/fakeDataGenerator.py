@@ -3,7 +3,7 @@ from datetime import date, timedelta, datetime
 from django.utils.timezone import localtime
 from random import randint
 
-SERVER_START_DATE = datetime.strptime('2000/01/01', '%Y/%m/%d').date()
+SERVER_START_DATE = datetime.strptime('1998/01/01', '%Y/%m/%d').date()
 SERVER_END_DATE = datetime.strptime('2020/02/08', '%Y/%m/%d').date()
 
 
@@ -21,7 +21,7 @@ def create_users():
             register_attendance.entry_date = single_date
             register_attendance.exit_date = single_date
             register_attendance.entry_time = localtime().now().time()
-            time_diff = randint(20000,28800)
+            time_diff = randint(20000, 28800)
             time_added = localtime().now() + timedelta(0, time_diff)
             register_attendance.exit_time = time_added.time()
             register_attendance.user_id_id = users.id
@@ -30,6 +30,3 @@ def create_users():
             else:
                 pass
     return True
-
-
-

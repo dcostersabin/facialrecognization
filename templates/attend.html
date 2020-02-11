@@ -11,10 +11,15 @@
                             <img class="bd-placeholder-img rounded-circle" width="140" height="140"
                                  src="/static/dataset/{{ name }}__id__{{ id }}/10.jpg"
                             >
-                            <h2>{{ data.name }}</h2>
-                            <h4 class="text-muted">Employee Id: {{ employee_id }}</h4>
-                            <smaall class="text-muted">System Id: {{ id }}</smaall>
+                            <h2>{{ name }}
 
+                            </h2>
+
+                            <h4 class="text-muted">Employee Id: {{ employee_id }}</h4>
+
+ <small
+                                    class="text-primary">{{ post|truncatechars:'15' }}</small> , <small
+                                class="">{{ department|truncatechars:'15' }}</small>
                         </div>
 
 

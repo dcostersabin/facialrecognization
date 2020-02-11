@@ -6,4 +6,4 @@ from user.models import Employees
 class EmployeeAddingForm(ModelForm):
     class Meta:
         model = Employees
-        fields = ['name', 'employee_id']
+        fields = ['name', 'employee_id', 'department', 'post']

@@ -58,17 +58,19 @@ def rec(request):
                       {'name': user.name, 'employee_id': user.employee_id, 'id': user.id, 'status': 'check',
                        'attendance': True, 'entry_date': user_current_data.entry_date,
                        'entry_time': user_current_data.entry_time, 'complete': True,
-                       'exit_time': user_current_data.exit_time})
+                       'exit_time': user_current_data.exit_time, 'post': user.post, 'department': user.department})
     elif Attendance.objects.filter(entry_date=datetime.now().date(), user_id=user.id).exists():
         user_current_data = Attendance.objects.filter(entry_date=datetime.now().date(), user_id=user.id).get()
         return render(request, 'attend.html',
                       {'name': user.name, 'employee_id': user.employee_id, 'id': user.id, 'status': 'check',
                        'attendance': True, 'entry_date': user_current_data.entry_date,
-                       'entry_time': user_current_data.entry_time, 'complete': False, })
+                       'entry_time': user_current_data.entry_time, 'complete': False, 'post': user.post,
+                       'department': user.department})
     else:
         return render(request, 'attend.html',
                       {'name': user.name, 'employee_id': user.employee_id, 'id': user.id, 'status': 'check',
-                       'attendance': False, 'complete': False})
+                       'attendance': False, 'complete': False,
+                       'post': user.post, 'department': user.department})
 
 
 @login_required
@@ -264,5 +266,5 @@ def download_pdf(request):
 
 @api_view(['GET'])
 def chart_data(request):
-    days = sort_data_to_days()
+    days = sort_data_to_first_filter()
     return Response((days))

@@ -30,11 +30,22 @@
 
                                 {% endif %}
                                 <p class="pl-2 media-body pb-3 mb-0 small lh-125 border-bottom border-gray ml-1">
-                                    <strong class="h5 d-block text-gray-dark">@<a style="cursor: pointer" class="text-info"
-                                                                               onclick='sub({{ employee.id }})'>{{ employee.name }}</a>
+                                    <strong class="h5 d-block text-gray-dark">@<a style="cursor: pointer"
+                                                                                  class="text-info"
+                                                                                  onclick='sub({{ employee.id }})'>{{ employee.name }}
+                                        <span class="text-muted">
+                                           <small>
+                                                <small
+                                                    class="text-primary">{{ employee.post|truncatechars:'15' }}</small> , <small
+                                                class="">{{ employee.department|truncatechars:'15' }}</small>
+                                           </small>
+                                </span>
+                                    </a>
+
+
                                     </strong>
-                                    <small class="h6">System Id:{{ employee.id }}</small>
                                     <small class="h6">Employee Id: {{ employee.employee_id }}</small>
+
 
                                 <div class="d-none">
                                     <form action="{% url 'profile' %}" method="post" id="form{{ employee.id }}">
@@ -72,7 +83,7 @@
     </div>
 
 
-    <
+
 
 
 {% endblock %}
