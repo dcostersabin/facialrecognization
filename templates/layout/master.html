@@ -213,7 +213,6 @@
     {% endblock %}
 </main>
 
-
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -235,43 +234,150 @@
 <script>
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-            datasets: [{
-                label: 'No Of Employees Present In A Day',
-                data: ['{{ days.0 }}', '{{ days.1 }}', '{{ days.2 }}', '{{ days.3 }}', '{{ days.4 }}', '{{ days.5 }}', '{{ days.6 }}', '{{ days.7 }}'],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1.5
-            }]
-        },
-        options: {
+            type: 'scatter',
+            data: {
+                labels: [ {% for f in actual %}
+                    {% for fa in f  %}
+                        {% if forloop.counter0 == 0%}
+                            '{{ fa }}' ,
 
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}],
+                datasets: [{
+                    label: 'Hours Worked By Employees',
+                    data: [
+                        {% for foo in actual %}
+                            {
+
+                                {% for f in foo  %}
+                                    {% if forloop.counter == 1%}
+                                        x: {{f}},
+                                    {% elif forloop.counter == 2 %}
+                                        y:{{f}}
+                                    {% endif %}
+                                {% endfor %}
+
+
+                            },
+                        {% endfor %}
+                        {% for foo in predicted %}
+                            {
+
+                                {% for f in foo  %}
+                                    {% if forloop.counter == 1%}
+                                        x: {{f}},
+                                    {% elif forloop.counter == 2 %}
+                                        y:{{f}}
+                                    {% endif %}
+                                {% endfor %}
+
+
+                            },
+                        {% endfor %}
+
+                    ],
+                    backgroundColor: [
+                        {#'rgba(255, 99, 132, 0.2)',#}
+                        {#'rgba(54, 162, 235, 0.2)',#}
+                        {#'rgba(255, 206, 86, 0.2)',#}
+                        {#'rgba(75, 192, 192, 0.2)',#}
+                        {#'rgba(153, 102, 255, 0.2)',#}
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        {% for foo in predicted %}
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                        {% endfor %}
+
+                    ],
+                    borderWidth:
+                        1.5
                 }]
+            },
+            options: {
+
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0
+                            , max: 9
+                            , callback: function (val) {
+                                if (val == 0 || val == 10) {
+                                    return null;
+                                }
+                                return Number.isFinite(val) ? val : null;
+                            }
+                        }
+                    }]
+                }
             }
-        }
-    });
+        })
+    ;
 
 </script>
+{% if days_chart %}
+    <script>
+        var ctx = document.getElementById('basic1').getContext('2d');
+        var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for day in week %}
+                        '{{ day }}',
+                    {% endfor %}],
+                    datasets: [{
+                        label: 'No Of Employees Attended',
+                        data: [
+                            {% for foo in days_chart %}
+                                {{ foo }},
+
+
+                            {% endfor %}
+
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            })
+        ;
+
+    </script>
+{% endif %}
 
 </html>

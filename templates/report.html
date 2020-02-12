@@ -55,6 +55,8 @@
                         <tr>
                             <th>Id</th>
                             <th>Employee Name</th>
+                            <th>Designation</th>
+                            <th>Department</th>
                             <th>Present For</th>
                             <th>Last Recorded</th>
                             <th>At</th>
@@ -68,6 +70,8 @@
 
                                 <td>{{ rec.detail.id }}</td>
                                 <td>{{ rec.detail.name }}</td>
+                            <td><small class="text-muted">{{ rec.detail.post }}</small></td>
+                            <td><small class="text-muted">{{ rec.detail.department }}</small></td>
                                 <td>{{ rec.total_record }} Days</td>
 
                                 {% if rec.record %}

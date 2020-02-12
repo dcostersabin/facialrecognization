@@ -16,8 +16,10 @@ from user.models import Attendance
 from django.contrib.auth.decorators import login_required
 from requestHandler.renderPdf import render_to_pdf
 from rest_framework.decorators import api_view
-from data_processing.fakeDataGenerator import create_users
-from machineLearning.views import sort_data_to_first_filter, sort_data_to_days
+from data_processing.fakeDataGenerator import create_users, create_initial_user
+from machineLearning.views import sort_data_to_first_filter, sort_data_to_days, user_daily_attendance, \
+    users_hour_prediction
+from machineLearning.neuralNetwork import neural_network_predict_hour_work
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 path = BASE_DIR + '/static/dataset/'
@@ -237,7 +239,12 @@ def report(request):
 
 def charts(request):
     days = sort_data_to_days()
-    return render(request, 'charts.html', {'days': days})
+    week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    sum = 0
+    for d in days:
+        sum += d
+
+    return render(request, 'charts.html', {'days_chart': days, 'totalDays': sum, 'week': week, })
 
 
 def download_pdf(request):
@@ -266,5 +273,29 @@ def download_pdf(request):
 
 @api_view(['GET'])
 def chart_data(request):
-    days = sort_data_to_first_filter()
-    return Response((days))
+    data = neural_network_predict_hour_work(1)
+    # # create_users()
+    # # sort_data_to_first_filter()
+    # data = user_daily_attendance()
+
+    return Response(data)
+
+
+
+
+def linear_chart(request):
+    if request.method == 'POST':
+        if Employees.objects.filter(employee_id=request.POST['user']).exists():
+            user = Employees.objects.filter(employee_id=request.POST['user']).values()
+            data = users_hour_prediction(request.POST['user'])
+            return render(request, 'linearRegression.html',
+                          {'predicted': data[0], 'actual': data[1], 'future': data[2], 'detail': user})
+        else:
+            messages.warning(request, "Please Enter A Valid User Id")
+            return redirect('linear')
+
+    else:
+        user = Employees.objects.filter(employee_id=1).values()
+        data = users_hour_prediction(1)
+        return render(request, 'linearRegression.html',
+                      {'predicted': data[0], 'actual': data[1], 'future': data[2], 'detail': user})

@@ -4,6 +4,7 @@
       <w>frontalface</w>
       <w>haarcascade</w>
       <w>haarcascades</w>
+      <w>regressor</w>
     </words>
   </dictionary>
 </component>

@@ -1,19 +1,47 @@
 {% extends 'layout/master.html' %}
 {% block content %}
-    <div class="container-fluid">
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h5>Days In A Week </h5>
-                    </div>
-                    <div class="body-text">
-
-                        <canvas id="myChart" width="200" height="200"></canvas>
-
-                    </div>
-                </div>
+    <div class="text-center mb-2">
+        <div class="">
+            <div class="nav-scroller bg-white shadow-sm">
+                <nav class="nav nav-underline">
+                    {#                    <a class="nav-link active" href="#">Basic Analysis</a>#}
+                    <a class="nav-link" href="{% url 'linear' %}">Linear Regression Prediction</a>
+                    <a class="nav-link" href="#">Neural Network Prediction</a>
+                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="#">Link</a>
+                </nav>
             </div>
         </div>
     </div>
+
+    <div class="col-md-12">
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h5>Total Attendance Per Day In {{ totalDays }} Days</h5>
+                        </div>
+
+                        <div class="body-text">
+
+                            <canvas id="basic1" width="200" height="200"></canvas>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        {% for foo in sort %}
+            {{ foo }}
+        {% endfor %}
+
+    </div>
+
 {% endblock %}
