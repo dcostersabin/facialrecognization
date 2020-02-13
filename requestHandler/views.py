@@ -19,7 +19,7 @@ from rest_framework.decorators import api_view
 from data_processing.fakeDataGenerator import create_users, create_initial_user
 from machineLearning.views import sort_data_to_first_filter, sort_data_to_days, user_daily_attendance, \
     users_hour_prediction
-from machineLearning.neuralNetwork import neural_network_predict_hour_work
+from machineLearning.models import NeuralNetworkPredictedRecord, NeuralNetworkTestRecord, NeuralNetworkTrainingRecord
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 path = BASE_DIR + '/static/dataset/'
@@ -243,8 +243,41 @@ def charts(request):
     sum = 0
     for d in days:
         sum += d
+    list = []
+    for users in Employees.objects.all():
+        total_recrds = Attendance.objects.filter(user_id_id=users.employee_id).count()
+        emp_info = users
+        list.append([total_recrds, emp_info])
+    for i in range(1, len(list)):
+        if list[i][0] < list[i - 1][0]:
+            c = list[i + 1][0]
+            list[1 + 1][0] = list[i][0]
+            list[i][0] = c
+    dept = []
+    dept_name = ['Development', 'Production', 'HumanResource', 'Administration']
+    for users in dept_name:
+        total_attendance = Attendance.objects.filter(user_id__department=users).count()
+        department = users
+        dept.append([total_attendance, department])
+    for i in range(1, len(dept)):
+        if dept[i][0] < dept[i - 1][0]:
+            c = dept[i + 1][0]
+            dept[1 + 1][0] = dept[i][0]
+            dept[i][0] = c
+    des = []
+    des_name = ['Developer', 'Manager', 'BranchManager']
+    for users in des_name:
+        total_attendance = Attendance.objects.filter(user_id__post=users).count()
+        designation = users
+        des.append([total_attendance, designation])
+    for i in range(1, len(des)):
+        if des[i][0] < des[i - 1][0]:
+            c = des[i + 1][0]
+            des[1 + 1][0] = des[i][0]
+            des[i][0] = c
 
-    return render(request, 'charts.html', {'days_chart': days, 'totalDays': sum, 'week': week, })
+    return render(request, 'charts.html',
+                  {'days_chart': days, 'totalDays': sum, 'week': week, 'recrds': list, 'dept': dept, 'des': des})
 
 
 def download_pdf(request):
@@ -273,14 +306,12 @@ def download_pdf(request):
 
 @api_view(['GET'])
 def chart_data(request):
-    data = neural_network_predict_hour_work(1)
+    # data = neural_network_predict_hour_work()
     # # create_users()
     # # sort_data_to_first_filter()
     # data = user_daily_attendance()
 
-    return Response(data)
-
-
+    return Response(True)
 
 
 def linear_chart(request):
@@ -299,3 +330,24 @@ def linear_chart(request):
         data = users_hour_prediction(1)
         return render(request, 'linearRegression.html',
                       {'predicted': data[0], 'actual': data[1], 'future': data[2], 'detail': user})
+
+
+def neural(request):
+    if request.method == 'POST':
+        if Employees.objects.filter(employee_id=request.POST['user']).exists():
+            user = Employees.objects.filter(employee_id=request.POST['user']).values()
+            training = NeuralNetworkTrainingRecord.objects.filter(use_id_id=request.POST['user']).values()
+            test = NeuralNetworkTestRecord.objects.filter(use_id_id=request.POST['user']).values()
+            predicted = NeuralNetworkPredictedRecord.objects.filter(use_id_id=request.POST['user']).values()
+            return render(request, 'neuralNetwork.html',
+                          {'training': training, 'test': test, 'predicted': predicted, 'detail': user})
+        else:
+            messages.warning(request, "Please Enter A Valid User Id")
+            return redirect('neural')
+    else:
+        user = Employees.objects.filter(employee_id=1).values()
+        training = NeuralNetworkTrainingRecord.objects.filter(use_id_id=1).values()
+        test = NeuralNetworkTestRecord.objects.filter(use_id_id=1).values()
+        predicted = NeuralNetworkPredictedRecord.objects.filter(use_id_id=1).values()
+        return render(request, 'neuralNetwork.html',
+                      {'training': training, 'test': test, 'predicted': predicted, 'detail': user})

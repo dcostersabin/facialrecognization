@@ -380,4 +380,455 @@
     </script>
 {% endif %}
 
+{% if test %}
+    <script>
+        var ctx = document.getElementById('neural').getContext('2d');
+        var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        {% for foo in test %}
+
+
+                            'Test',
+
+
+
+                        {% endfor %}
+                        {% for foo in training %}
+
+
+                            'Train',
+
+
+
+                        {% endfor %}
+                        {% for foo in predicted %}
+
+
+                            'Predicted',
+
+
+
+                        {% endfor %}
+
+                    ],
+                    datasets: [{
+                        label: 'Hours Worked',
+                        data: [
+                            {% for foo in test %}
+
+
+                                '{{ foo.data }}',
+
+
+
+                            {% endfor %},
+                            {% for foo in training %}
+
+
+                                '{{ foo.data }}',
+
+
+
+                            {% endfor %},
+                            {% for foo in predicted %}
+
+
+                                '{{ foo.data }}',
+
+
+
+                            {% endfor %}
+
+
+                        ],
+                        backgroundColor: [
+                            {% for foo in test %}
+
+
+                                'rgba(255, 99, 132, 0.2)',
+
+
+
+                            {% endfor %}
+                            {% for foo in training %}
+
+
+                                'rgba(54, 162, 235, 0.2)',
+
+
+
+                            {% endfor %}
+
+
+
+
+                        ],
+                        borderColor: [
+
+                            {% for foo in test %}
+
+
+                                'rgba(255, 99, 132, 1)',
+
+
+
+                            {% endfor %}
+
+
+
+
+
+
+
+
+
+
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0
+                                , max: 9
+                                , callback: function (val) {
+                                    if (val == 0 || val == 10) {
+                                        return null;
+                                    }
+                                    return Number.isFinite(val) ? val : null;
+                                }
+                            }
+                        }]
+                    }
+                }
+            })
+        ;
+
+    </script>
+{% endif %}
+
+{% if dept %}
+    <script>
+        var ctx = document.getElementById('dept').getContext('2d');
+        var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: [     {% for recrd in dept %}
+                        {% for rec in recrd %}
+
+                            {% if forloop.counter0 == 1 %}
+
+                                '{{ rec }}',
+
+
+
+                            {% endif %}
+
+                        {% endfor %}
+
+
+                    {% endfor %} ],
+                    datasets: [{
+                        label: 'Hours Worked By Employees',
+                        data: [ {% for recrd in dept %}
+                            {% for rec in recrd %}
+
+                                {% if forloop.counter0 == 0 %}
+
+                                    '{{ rec }}',
+
+
+
+                                {% endif %}
+
+                            {% endfor %}
+
+
+                        {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            {% for foo in predicted %}
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                            {% endfor %}
+
+                        ],
+                        borderWidth:
+                            1.5
+                    }]
+                },
+                options: {
+
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0
+                                , max:  {% for recrd in recrds %}
+                                    {% if forloop.counter0 == 0 %}
+                                        {% for rec in recrd %}
+
+                                            {% if forloop.counter0 == 0 %}
+
+                                                {{ rec }}+100
+
+
+
+                                            {% endif %}
+
+                                        {% endfor %}
+                                    {% endif %}
+
+
+                                {% endfor %}
+                                , callback: function (val) {
+                                    if (val == 0 || val == 10) {
+                                        return null;
+                                    }
+                                    return Number.isFinite(val) ? val : null;
+                                }
+                            }
+                        }
+                        ]
+                    }
+                }
+            })
+        ;
+
+    </script>
+
+{% endif %}
+{% if recrds %}
+    <script>
+        var ctx = document.getElementById('emp').getContext('2d');
+        var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: [     {% for recrd in recrds %}
+                        {% for rec in recrd %}
+
+                            {% if forloop.counter0 == 1 %}
+
+                                '{{ rec.name }}',
+
+
+
+                            {% endif %}
+
+                        {% endfor %}
+
+
+                    {% endfor %} ],
+                    datasets: [{
+                        label: 'Hours Worked By Employees',
+                        data: [ {% for recrd in recrds %}
+                            {% for rec in recrd %}
+
+                                {% if forloop.counter0 == 0 %}
+
+                                    '{{ rec }}',
+
+
+
+                                {% endif %}
+
+                            {% endfor %}
+
+
+                        {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            {% for foo in predicted %}
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                            {% endfor %}
+
+                        ],
+                        borderWidth:
+                            1.5
+                    }]
+                },
+                options: {
+
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0
+                                , max:  {% for recrd in recrds %}
+                                    {% if forloop.counter0 == 0 %}
+                                        {% for rec in recrd %}
+
+                                            {% if forloop.counter0 == 0 %}
+
+                                                {{ rec }}+100
+
+
+
+                                            {% endif %}
+
+                                        {% endfor %}
+                                    {% endif %}
+
+
+                                {% endfor %}
+                                , callback: function (val) {
+                                    if (val == 0 || val == 10) {
+                                        return null;
+                                    }
+                                    return Number.isFinite(val) ? val : null;
+                                }
+                            }
+                        }
+                        ]
+                    }
+                }
+            })
+        ;
+
+    </script>
+
+{% endif %}
+{% if des %}
+
+{% endif %}
+<script>
+        var ctx = document.getElementById('des').getContext('2d');
+        var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: [     {% for recrd in des %}
+                        {% for rec in recrd %}
+
+                            {% if forloop.counter0 == 1 %}
+
+                                '{{ rec }}',
+
+
+
+                            {% endif %}
+
+                        {% endfor %}
+
+
+                    {% endfor %} ],
+                    datasets: [{
+                        label: 'Hours Worked By Employees',
+                        data: [ {% for recrd in des %}
+                            {% for rec in recrd %}
+
+                                {% if forloop.counter0 == 0 %}
+
+                                    '{{ rec }}',
+
+
+
+                                {% endif %}
+
+                            {% endfor %}
+
+
+                        {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            {% for foo in predicted %}
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                            {% endfor %}
+
+                        ],
+                        borderWidth:
+                            1.5
+                    }]
+                },
+                options: {
+
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0
+                                , max:  {% for recrd in recrds %}
+                                    {% if forloop.counter0 == 0 %}
+                                        {% for rec in recrd %}
+
+                                            {% if forloop.counter0 == 0 %}
+
+                                                {{ rec }}+100
+
+
+
+                                            {% endif %}
+
+                                        {% endfor %}
+                                    {% endif %}
+
+
+                                {% endfor %}
+                                , callback: function (val) {
+                                    if (val == 0 || val == 10) {
+                                        return null;
+                                    }
+                                    return Number.isFinite(val) ? val : null;
+                                }
+                            }
+                        }
+                        ]
+                    }
+                }
+            })
+        ;
+
+    </script
+
 </html>

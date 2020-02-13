@@ -22,8 +22,18 @@ class UserDailyAttendance(models.Model):
     whichDay = models.BigIntegerField(blank=False)
 
 
-class NeuralNetworkRecord(models.Model):
-    use_id = models.ForeignKey(Employees,on_delete=models.CASCADE,null=False)
-    trained_data = models.TextField
-    actual_data = models.TextField
-    predicted_data = models.TextField
+class NeuralNetworkTrainingRecord(models.Model):
+    use_id = models.ForeignKey(Employees, on_delete=models.CASCADE, null=False)
+    data = models.FloatField(null=False)
+
+
+class NeuralNetworkTestRecord(models.Model):
+    use_id = models.ForeignKey(Employees, on_delete=models.CASCADE, null=False)
+    data = models.FloatField(null=False)
+
+
+class NeuralNetworkPredictedRecord(models.Model):
+    use_id = models.ForeignKey(Employees, on_delete=models.CASCADE, null=False)
+    data = models.FloatField(null=False)
+
+

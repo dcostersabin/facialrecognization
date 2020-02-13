@@ -21,6 +21,7 @@ urlpatterns = [
     path('charts/',views.charts,name='charts'),
     path('downloadPdf/',views.download_pdf,name='downloadPdf'),
     path('chartData/',views.chart_data,name='chartData'),
-    path('linearRegression',views.linear_chart,name='linear')
+    path('linearRegression',views.linear_chart,name='linear'),
+    path('neuralNetwork',views.neural,name='neural')
 
 ]

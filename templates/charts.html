@@ -4,14 +4,10 @@
         <div class="">
             <div class="nav-scroller bg-white shadow-sm">
                 <nav class="nav nav-underline">
-                    {#                    <a class="nav-link active" href="#">Basic Analysis</a>#}
+                    <a class="nav-link active" href="{% url 'charts' %}">Basic Analysis</a>
                     <a class="nav-link" href="{% url 'linear' %}">Linear Regression Prediction</a>
                     <a class="nav-link" href="#">Neural Network Prediction</a>
-                    <a class="nav-link" href="#">Link</a>
-                    <a class="nav-link" href="#">Link</a>
-                    <a class="nav-link" href="#">Link</a>
-                    <a class="nav-link" href="#">Link</a>
-                    <a class="nav-link" href="#">Link</a>
+
                 </nav>
             </div>
         </div>
@@ -20,7 +16,7 @@
     <div class="col-md-12">
 
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">
@@ -37,11 +33,127 @@
                 </div>
 
             </div>
-        </div>
-        {% for foo in sort %}
-            {{ foo }}
-        {% endfor %}
 
-    </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h5>Total Employees Attendance</h5>
+                        </div>
+
+                        <div class="body-text">
+
+                            <canvas id="emp" width="200" height="200"></canvas>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h5>Total Department Attendance</h5>
+                        </div>
+
+                        <div class="body-text">
+
+                            <canvas id="dept" width="200" height="200"></canvas>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h5>Total Designation's Attendance</h5>
+                        </div>
+
+                        <div class="body-text">
+
+                            <canvas id="des" width="200" height="200"></canvas>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h5>Employees With Most Attendance</h5>
+                        </div>
+
+                        <div class="body-text">
+
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                <tr>
+                                    <th>Total Days</th>
+                                    <th>Name</th>
+                                    <th>Employee Id</th>
+                                    <th>Department</th>
+                                    <th>Designation</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for recrd in recrds %}
+                                    <tr>
+                                        {% for rec in recrd %}
+
+                                            {% if forloop.counter0 == 0 %}
+                                                <td>{{ rec }}</td>
+                                            {% elif forloop.counter0 == 1 %}
+
+                                                <td>{{ rec.name }}</td>
+                                                <td>{{ rec.employee_id }}</td>
+                                                <td>{{ rec.department }}</td>
+                                                <td>{{ rec.post }}</td>
+
+
+                                            {% endif %}
+
+                                        {% endfor %}
+                                    </tr>
+
+                                {% endfor %}
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {% for recrd in recrds %}
+
+                    {% for rec in recrd %}
+                        {% if forloop.counter0 == 0 %}
+
+                        {% endif %}
+                    {% endfor %}
+
+
+                {% endfor %}
+
+            </div>
+
+
+        </div>
+
+
 
 {% endblock %}
